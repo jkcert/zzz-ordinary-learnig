@@ -1,1 +1,50 @@
+分治策略的三个步骤：分解，解决，合并
+递归式的三种解法：
+   代入法：猜想一个界，然后用数学归纳法证明这个界是正确的。
+   递归树法：将递归式转换为一颗树，其结点表示不同层次的递归调用产生的代价。然后用边界和技术来求解递归式。
+   主方法：可求解形如下面公式的递归式的界：T(n)=a*T(n/b)+f(n)。其中a≥1，b>1，f(n)是一个给定的函数。这代表生成a个子问题，每个子问题的规模是原问
+   题的1/b，分解和合并的步骤总花费的时间为f(n)。
+**当声明、求解递归式时，我们常常忽略向下取整，向上取整及边界条件。
 
+例1.最大子数组问题
+   寻找A的和最大的非空连续子数组。
+   我们来思考如何使用分治思想来求解最大子数组问题。假定我们要寻找子数组A[low..high]的最大子数组。我们找到子数组的中央位置，比如mid，然后考虑求解
+   两个子数组A[low..mid]和A[mid+1..high]。A[low..high]的任何连续子数组A[i..j]所处的位置必然是一下三种情况之一：
+      *完全位于子数组A[low..mid]中
+      *完全位于子数组A[mid+1..high]中
+      *跨越了中点
+   我们可以递归地求解A[low..mid]和A[mid+1..high]的最大子数组，因为这两个问题仍是最大子数组问题，只是规模更小。因此，剩下的工作只是寻找跨越中点的
+   最大子数组，然后在三种情况中选取和最大者。
+   下面给出伪代码：
+   FIND-MAX-CROSSING-SUBARRAY(A,low,mid,high)
+        left-sum = -∞
+        sum = 0
+        for i = mid downto low
+            sum = sum + A[i]
+            if sum > left-sum
+               left-sum = sum
+               max-left = i
+        right-sum = -∞
+        sum = 0
+        for j = mid+1 to high
+            sum = sum + A[j]
+            if sum > right-sum
+               right-sum = sum
+               max-right = j
+        return (max-left, max-right, left-sum + right-sum)
+    
+    FIND-MAXIMUM-SUBARRAY(A, low, high)
+        if low == high
+            return(A, low, high)
+        else mid = (low+high)/2
+            (left-low, left-high, left-sum) = FIND-MAXIMUM-SUBARRAY(A, low, mid)
+            (right-low, right-high, right-sum) = FIND-MAXIMUM-SUBARRAY(A, mid+1, high)
+            (cross-low, cross-high, cross-sum) = FIND-MAX-CROSSING-SUBARRAY(A,low,mid,high)
+        if left-sum ≥ right-sum and left-sum ≥ cross-sum
+            return(left-low, left-high, left-sum)
+        elseif right-sum ≥ left-sum and right-sum ≥ cross-sum
+            return(right-low, right-high, right-sum)
+        else
+            return(cross-low, cross-high, cross-sum)
+    
+    初始调用FIND-MAXIMUM-SUBARRAY(A, 1, A.length)即可求出A[1..n]的最大子数组。
