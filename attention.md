@@ -32,9 +32,10 @@
 + QKV 都是对输入 x 的线性映射。  
 + score-function 使用 scaled-dot product。  
 + multihead 的方式将多个 head 的输出 z，进行 concat 后，通过线性变换得到最后的输出 z。  
+![self-attention.png](https://upload-images.jianshu.io/upload_images/2509688-f613a0fe5b64831a.png "self-attention.png")
 
 ### transformer中的self-attention ###
 + Encoder self-attention：Encoder 阶段捕获当前 word 和其他输入词的关联；  
 + MaskedDecoder self-attention ：Decoder 阶段捕获当前 word 与已经看到的解码词之间的关联，从矩阵上直观来看就是一个带有 mask 的三角矩阵；  
 + Encoder-Decoder Attention：就是将 Decoder 和 Encoder 输入建立联系，和之前那些普通 Attention 一样；  
-![self.png](https://upload-images.jianshu.io/upload_images/2509688-158e290a98d90bcd.png "self.png")
+![transformer.png](https://upload-images.jianshu.io/upload_images/2509688-158e290a98d90bcd.png "transformer.png")
